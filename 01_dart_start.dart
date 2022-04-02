@@ -13,6 +13,7 @@ void variables() {
       'name is $name, year is $year, antennaDiameter is $antennaDiameter, flybyObjects is $flybyObjects, image is $image');
 }
 
+//dart语言变量语法
 void test(){
   late String description; //惰性初始化变量
   description = 'Feijoada!';
