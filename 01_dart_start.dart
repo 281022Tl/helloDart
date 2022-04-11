@@ -43,6 +43,39 @@ void control_flow_statements() {
     print(year);
   }
 }
+// 函数 （https://dart.cn/samples#functions）
+int fibonacci(int n) {
+  if (n == 0 || n == 1) return n;
+  return fibonacci(n - 1) + fibonacci(n - 2);
+}
+
+bool is_hit(String line, String target) {
+  return line.contains(target);
+}
+
+void functions() {
+  print('\n');
+  print('#' * 40);
+  print('函数');
+  print('#' * 40);
+
+  var fib = fibonacci(9);
+  print('fib 9 is $fib');
+
+  var flybyObjects = [
+    'hello',
+    'abc',
+    '123',
+    'how do you do',
+    'nice to meet you'
+  ];
+  flybyObjects.where((name) => name.contains('you')).forEach(print);
+
+  var hit_lines = flybyObjects.where((x) => is_hit(x, 'o'));
+  for (var one in hit_lines) {
+    print('one is $one');
+  }
+}
 
 void main(List<String> args) {
   // 变量
@@ -51,4 +84,6 @@ void main(List<String> args) {
   //控制流程
   control_flow_statements();
  
+  //函数
+  functions();
 }
