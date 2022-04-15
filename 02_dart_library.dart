@@ -100,7 +100,107 @@ void dartcore_digital_string() {
   assert(fullString == 'Use a StringBuffer for efficient string creation.');
   }
 
-  //正则表达式
-  
+  //正则表达式，匹配一个或多个字符
+  var numbers = RegExp(r'\d+');
+  var allCharacters = 'llamas live fifteen to twenty years';
+  var someDigits = 'llamas live 15 to 20 years';
 
+  //使用contains()匹配字符串
+  assert(!allCharacters.contains(numbers));
+  assert(someDigits.contains(numbers));
+
+  //用另一个字符串替换匹配的字符串
+  var exedOut = someDigits.replaceAll(numbers, 'XX');
+  assert(exedOut == 'llamas live XX to XX years');
+
+  //使用 RegExp类，正则表达式进行匹配
+  var number = RegExp(r'\d+');
+  var someDigit = 'llamas live 15 to 20 years';
+
+  //检查是否匹配
+  assert(numbers.hasMatch(someDigit));
+
+  for (final match in number.allMatches(someDigit)) {
+  print(match.group(0)); // 15, then 20
+  }
+
+}
+
+ //列表listhttps://dart.cn/guides/libraries/library-tour#collections
+void List_test(){
+  //构造一个空list
+  var grains = <String>[];
+  assert(grains.isEmpty);
+
+  // Create a list using a list literal.
+  var fruits = ['apples', 'oranges'];
+
+  //添加一个元素到列表中
+  fruits.add('kiwis');
+
+  //添加多个元素到列表中
+  fruits.addAll(['grapes', 'bananas']);
+
+  //获取列表长度
+  assert(fruits.length == 5);
+
+  //移动列表中一个元素
+  var appleIndex = fruits.indexOf('apples');
+  fruits.removeAt(appleIndex);
+  assert(fruits.length == 4);
+
+  //移除所有元素
+  fruits.clear();
+  assert(fruits.isEmpty);
+
+  // You can also create a List using one of the constructors.
+  var vegetables = List.filled(99, 'broccoli');
+  assert(vegetables.every((v) => v == 'broccoli'));
+
+  //indexOf()方法查找一个对象在list中的下标值
+  var fruits = ['apples', 'oranges'];
+
+  //使用下表访问list中元素
+  assert(fruits[0] == 'apples');
+
+  //查找元素在list中的下表
+  assert(fruits.indexOf('apples') == 0);
+
+  // sort()方法排序一个list
+  var fruits = ['bananas', 'apples', 'oranges'];
+
+  fruits.sort((a, b) => a.compareTo(b)); //使用compareTo()函数定义比较大小
+  assert(fruits[0] == 'apples');
+
+  //使用泛型，指定 list 应该包含的元素类型
+  var fruits = <String>[];
+
+  fruits.add('apples');
+  var fruit = fruits[0];
+  assert(fruit is String);
+
+  // Error: 'int' can't be assigned to 'String'
+  //fruits.add(5); 
+
+}
+
+//set是一个无序的，元素唯一的集合
+void set_test(){
+  //创建一个集合
+  var ingredients = <String>{};
+
+  //添加元素到集合中
+  ingredients.addAll(['gold', 'titanium', 'xenon']);
+  assert(ingredients.length == 3);
+
+  //添加一个重复的元素到集合中是无效的
+  ingredients.add('gold');
+  assert(ingredients.length == 3);
+
+  //从set中移除一个元素
+  ingredients.remove('gold');
+  assert(ingredients.length == 2);
+
+  //使用contains() 和 containsAll() 来检查一个或多个元素是否在set中
+  
 }
