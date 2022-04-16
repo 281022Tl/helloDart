@@ -211,7 +211,7 @@ void set_test() {
 }
 
 //Maps是一个无序的 key-value （键值对）集合,map 将 kay 与 value 关联，以便于检索
-void Maps_tset() {
+void Maps_test() {
   //maps通常使用字符串作为key
   var hawaiianBeaches = {
     'Oahu': ['Waikiki', 'Kailua', 'Waimanalo'],
@@ -240,9 +240,9 @@ void Maps_tset() {
 
   //从一个 map 中检索出所有的 key 或所有的 value
   hawaiianBeaches = {
-  'Oahu': ['Waikiki', 'Kailua', 'Waimanalo'],
-  'Big Island': ['Wailea Bay', 'Pololu Beach'],
-  'Kauai': ['Hanalei', 'Poipu']
+    'Oahu': ['Waikiki', 'Kailua', 'Waimanalo'],
+    'Big Island': ['Wailea Bay', 'Pololu Beach'],
+    'Kauai': ['Hanalei', 'Poipu']
   };
 
   //获取的key是一个无序集合
@@ -253,13 +253,13 @@ void Maps_tset() {
   //获取的value是一个无序集合
   var values = hawaiianBeaches.values;
   assert(values.length == 3);
-  assert(values.any((v) => v.contains('Waikiki')));//any返回值为bool型
+  assert(values.any((v) => v.contains('Waikiki'))); //any返回值为bool型
 
-  //containsKey()方法检查一个map中是否包含某个key 
+  //containsKey()方法检查一个map中是否包含某个key
   hawaiianBeaches = {
-  'Oahu': ['Waikiki', 'Kailua', 'Waimanalo'],
-  'Big Island': ['Wailea Bay', 'Pololu Beach'],
-  'Kauai': ['Hanalei', 'Poipu']
+    'Oahu': ['Waikiki', 'Kailua', 'Waimanalo'],
+    'Big Island': ['Wailea Bay', 'Pololu Beach'],
+    'Kauai': ['Hanalei', 'Poipu']
   };
 
   assert(hawaiianBeaches.containsKey('Oahu'));
@@ -278,7 +278,7 @@ void Maps_tset() {
 }
 
 //公共集合方法
-void the_public_methods(){
+void the_public_methods() {
   //使用isEmpty和isNotEmpty方法可以检查list，set或map对象中是否包含元素
   var coffees = <String>[];
   var teas = ['green', 'black', 'chamomile', 'earl grey'];
@@ -296,8 +296,8 @@ void the_public_methods(){
   };
 
   hawaiianBeaches.forEach((k, v) {
-  print('I want to visit $k and swim at $v');
-  // I want to visit Oahu and swim at [Waikiki, Kailua, Waimanalo], etc.
+    print('I want to visit $k and swim at $v');
+    // I want to visit Oahu and swim at [Waikiki, Kailua, Waimanalo], etc.
   });
 
   //map() 方法，这个方法将所有结果返回到一个对象中
@@ -307,6 +307,156 @@ void the_public_methods(){
   //使用 map().toList() 或 map().toSet()，可以强制在每个项目上立即调用函数
   loudTeas = teas.map((tea) => tea.toUpperCase()).toList();
 
-  //
+  teas = ['green', 'black', 'chamomile', 'earl grey'];
 
+  //洋甘菊不含咖啡因
+  bool isDecaffeinated(String teaName) => teaName == 'chamomile';
+
+  // where()方法可以获取所有匹配条件的元素，查找元素，并在指定的函数中返回true
+  var decaffeinatedTeas = teas.where((tea) => isDecaffeinated(tea));
+
+  //使用any()来检查集合中至少含有一个元素满足条件
+  assert(teas.any(isDecaffeinated));
+
+  //使用every()方法检查集合中是否所有元素满足条件
+  assert(!teas.every(isDecaffeinated));
+}
+
+//测试
+void collections() {
+  print('\n');
+  print('#' * 40);
+  print('集合');
+  print('#' * 40);
+
+  List_test(); //列表
+  set_test(); //集合
+  Maps_test(); //哈希映射
+  the_public_methods();
+}
+
+//编码和解码 URI 组件
+//使用encodeComponent()和decodeComponent()方法，对处特殊字符以外的字符进行编解码
+void URI_test() {
+  //编码some和message之间的空格
+  var uri = 'https://example.org/api?foo=some message';
+  var encoded = Uri.encodeComponent(uri);
+  assert(encoded == 'https%3A%2F%2Fexample.org%2Fapi%3Ffoo%3Dsome%20message');
+
+  var decoded = Uri.decodeComponent(encoded);
+  assert(uri == decoded);
+
+  //编码所有字符，例如/被编码为 %2F
+  uri = 'https://example.org/api?foo=some message';
+  encoded = Uri.encodeComponent(uri);
+  assert(encoded == 'https%3A%2F%2Fexample.org%2Fapi%3Ffoo%3Dsome%20message');
+
+  decoded = Uri.decodeComponent(encoded);
+  assert(uri == decoded);
+
+  //使用Uri对象的字段（例如 path）来获取一个Uri对象或者URI字符串的一部分
+  var uri_1 = Uri.parse('https://example.org:8080/foo/bar#frag');
+
+  assert(uri_1.scheme == 'https');
+  assert(uri_1.host == 'example.org');
+  assert(uri_1.path == '/foo/bar');
+  assert(uri_1.fragment == 'frag');
+  assert(uri_1.origin == 'https://example.org:8080');
+
+  //使用 Uri() 构造函数，可以将各组件部分构建成URI
+  uri_1 = Uri(
+      scheme: 'https', host: 'example.org', path: '/foo/bar', fragment: 'frag');
+  assert(uri_1.toString() == 'https://example.org/foo/bar#frag');
+}
+
+//日期和时间 https://dart.cn/guides/libraries/library-tour#dates-and-times
+void date_time() {
+  //获取当前时刻
+  var now = DateTime.now();
+
+  //根据本地时区创建DateTime对象
+  var y2k = DateTime(2000); // January 1, 2000
+
+  //指定年月日
+  y2k = DateTime.utc(2000); // 1/1/2000, UTC
+
+  //将日期指定为UTC时区
+  y2k = DateTime.utc(2000); // 1/1/2000, UTC
+
+  //指定Unix纪元以来，以毫秒为单位的日期和时间
+  y2k = DateTime.fromMillisecondsSinceEpoch(946684800000, isUtc: true);
+
+  //解析ISO 8601日期
+  y2k = DateTime.parse('2000-01-01T00:00:00Z');
+
+  //日期中 millisecondsSinceEpoch 属性返回自 “Unix 纪元（January 1, 1970, UTC）”以来的毫秒数
+  // 1/1/2000, UTC
+  y2k = DateTime.utc(2000);
+  assert(y2k.millisecondsSinceEpoch == 946684800000);
+
+  //1/1/1970, UTC
+  var unixEpoch = DateTime.utc(1970);
+  assert(unixEpoch.millisecondsSinceEpoch == 0);
+
+  //使用 Duration类来计算两个日期的差，也可以对时刻进行前移和后移操作
+  y2k = DateTime.utc(2000);
+
+  //增加一年
+  var y2001 = y2k.add(const Duration(days: 366));
+  assert(y2001.year == 2001);
+
+  //减少30天
+  var december2000 = y2001.subtract(const Duration(days: 30));
+  assert(december2000.year == 2000);
+  assert(december2000.month == 12);
+
+  //计算两个时刻之间的差，返回Duration对象
+  var duration = y2001.difference(y2k);
+  assert(duration.inDays == 366); // y2k was a leap year.
+}
+
+//dart:math - 数学和随机数 https://dart.cn/guides/libraries/library-tour#dartmath---math-and-random
+void math_random() {
+  //Math 库提供基本的三角函数
+  //Cosine
+  assert(cos(pi) == -1.0);
+
+  // Sine
+  var degrees = 30;
+  var radians = degrees * (pi / 180);
+
+  //radians is now 0.52359.
+  var sinOf30degrees = sin(radians);
+  //sin 30° = 0.5
+  assert((sinOf30degrees - 0.5).abs() < 0.01);
+
+  //最大值和最小值
+  assert(max(1, 1000) == 1000);
+  assert(min(1, -1000) == -1000);
+
+  //math库中常用数学常数
+  print(e); // 2.718281828459045
+  print(pi); // 3.141592653589793
+  print(sqrt2); // 1.4142135623730951
+
+  //使用Random类产生随机数
+  var random = Random();
+  random.nextDouble(); // Between 0.0 and 1.0: [0, 1)
+  random.nextInt(10); // Between 0 and 9.
+
+  //也可以随机产生随机布尔值序列
+  random = Random();
+  random.nextBool(); // true or false
+}
+
+void main(List<String> args) {
+  dartcore_digital_string(); //数字、集合、字符串类
+
+  collections(); //list,let,map类
+
+  URI_test(); // URI组件
+
+  date_time(); //时间和日期
+
+  math_random(); //数学和随机数
 }
