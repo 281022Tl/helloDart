@@ -1,3 +1,7 @@
+import 'dart:async';
+import 'dart:io';
+import 'dart:math';
+
 //变量 https://dart.cn/samples#variables
 void variables() {
   var name = 'Voyager I';
@@ -43,6 +47,7 @@ void control_flow_statements() {
     print(year);
   }
 }
+
 // 函数 （https://dart.cn/samples#functions）
 int fibonacci(int n) {
   if (n == 0 || n == 1) return n;
@@ -78,11 +83,12 @@ void functions() {
 }
 
 //注释（https://dart.cn/samples#comments）
-void zhuShi(){
+void zhuShi() {
   print('\n');
   print('#' * 40);
   print('注释');
-  print('#' * 40)
+  print('#' * 40);
+
   /// 这是一个文档注释。
   /// 文档注释用于为库、类以及类的成员添加注释。
   /// 像IDE和dartdoc这样的工具可以专门处理文档注释。
@@ -91,25 +97,32 @@ void zhuShi(){
 }
 
 //导入 https://dart.cn/samples#imports
-void imports(){
+void imports() {
   print('\n');
   print('#' * 40);
   print('导入');
   print('#' * 40);
 
+  var mypi = pi;
+  print('pi is $mypi');
+
+  var x = pi / 3;
+  var y = sin(x);
+  print('sin(pi/3) is $y');
+
   //导入方式
   // Importing core libraries
-  import 'dart:math';
+  //import 'dart:math';
 
   // Importing libraries from external packages
-  import 'package:test/test.dart';
+  //import 'package:test/test.dart';
 
   // Importing files
-  import 'path/to/my_other_file.dart';
+  //import 'path/to/my_other_file.dart';
 }
 
 //类 https://dart.cn/samples#classes
-  class Spacecraft {
+class Spacecraft {
   String name;
   DateTime? launchDate;
 
@@ -137,7 +150,7 @@ void imports(){
   }
 }
 
-void classes(){
+void classes() {
   print('\n');
   print('#' * 40);
   print('类');
@@ -182,11 +195,12 @@ mixin Piloted {
     print('Number of astronauts: $astronauts');
   }
 }
+
 class PilotedCraft extends Spacecraft with Piloted {
   PilotedCraft(String name, DateTime launchDate) : super(name, launchDate);
 }
 
-void mixins(){
+void mixins() {
   print('\n');
   print('#' * 40);
   print('Mixins');
@@ -199,7 +213,7 @@ void mixins(){
 
 //接口和抽象类 https://dart.cn/samples#interfaces-and-abstract-classes
 class MockSpaceship implements Spacecraft {
-    @override
+  @override
   DateTime? launchDate;
 
   @override
@@ -232,25 +246,41 @@ Future<void> the_async() async {
   print('#' * 40);
   print('异步');
   print('#' * 40);
-Future<void> the_async() async {
-Future<void> createDescriptions(Iterable<String> objects) async {
-  for (final object in objects) {
-    try {
-      var file = File('$object.txt');
-      if (await file.exists()) {
-        var modified = await file.lastModified();
-        print(
-            'File for $object already exists. It was modified on $modified.');
-        continue;
+
+  const oneSecond = Duration(seconds: 1);
+
+  Future<void> printWithDelay1(String message) async {
+    await Future.delayed(oneSecond);
+    print(message);
+  }
+
+  printWithDelay1('过了1秒钟. 2');
+  print('done 2.');
+
+  Future<void> createDescriptions(Iterable<String> objects) async {
+    for (final object in objects) {
+      try {
+        var file = File('$object.txt');
+        if (await file.exists()) {
+          var modified = await file.lastModified();
+          print(
+              'File for $object already exists. It was modified on $modified.');
+          continue;
+        }
+        await file.create();
+        await file.writeAsString('Start Describing $object in this file.');
+        print('File for $object created.');
+      } on IOException catch (e) {
+        print('Cannot create description for $object: $e');
       }
-      await file.create();
-      await file.writeAsString('Start describing $object in this file.');
-    } on IOException catch (e) {
-      print('Cannot create description for $object: $e');
     }
   }
-}
 
+  var the_objects = ['飞机', '火箭', '铲土车'];
+  createDescriptions(the_objects);
+
+  await Future.delayed(Duration(seconds: 5));
+}
 
 void main(List<String> args) {
   // 变量
@@ -258,15 +288,15 @@ void main(List<String> args) {
 
   //控制流程
   control_flow_statements();
- 
+
   //函数
   functions();
 
   zhuShi(); //注释
 
-  classes();//类
+  classes(); //类
 
-  mixins();//mixins
+  mixins(); //mixins
 
-  interface_and_abstract_classes();//接口和抽象类
+  interface_and_abstract_classes(); //接口和抽象类
 }
