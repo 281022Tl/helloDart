@@ -77,6 +77,52 @@ void functions() {
   }
 }
 
+//注释（https://dart.cn/samples#comments）
+void zhuShi(){
+  print('\n');
+  print('#' * 40);
+  print('注释');
+  print('#' * 40)
+  /// 这是一个文档注释。
+  /// 文档注释用于为库、类以及类的成员添加注释。
+  /// 像IDE和dartdoc这样的工具可以专门处理文档注释。
+
+  /* 也可以像这样使用单斜杠和星号的注释方式 */
+}
+
+//导入 https://dart.cn/samples#imports
+void imports(){
+  print('\n');
+  print('#' * 40);
+  print('导入');
+  print('#' * 40);
+
+  //导入方式
+  // Importing core libraries
+  import 'dart:math';
+
+  // Importing libraries from external packages
+  import 'package:test/test.dart';
+
+  // Importing files
+  import 'path/to/my_other_file.dart';
+}
+
+//类 https://dart.cn/samples#classes
+void class(){
+  class Spacecraft {
+  String name;
+  DateTime? launchDate;
+
+  // Read-only non-final property
+  int? get launchYear => launchDate?.year;
+
+  // Constructor, with syntactic sugar for assignment to members.
+  Spacecraft(this.name, this.launchDate) {
+    // Initialization code goes here.
+  }
+}
+
 void main(List<String> args) {
   // 变量
   variables();
