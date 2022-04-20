@@ -109,7 +109,6 @@ void imports(){
 }
 
 //类 https://dart.cn/samples#classes
-void class(){
   class Spacecraft {
   String name;
   DateTime? launchDate;
@@ -121,7 +120,137 @@ void class(){
   Spacecraft(this.name, this.launchDate) {
     // Initialization code goes here.
   }
+  // Named constructor that forwards to the default one.
+  Spacecraft.unlaunched(String name) : this(name, null);
+
+  // Method.
+  void describe() {
+    print('Spacecraft: $name');
+    // Type promotion doesn't work on getters.
+    var launchDate = this.launchDate;
+    if (launchDate != null) {
+      int years = DateTime.now().difference(launchDate).inDays ~/ 365;
+      print('Launched: $launchYear ($years years ago)');
+    } else {
+      print('Unlaunched');
+    }
+  }
 }
+
+void classes(){
+  print('\n');
+  print('#' * 40);
+  print('类');
+  print('#' * 40);
+
+  var voyager = Spacecraft('Voyager I', DateTime(1977, 9, 5));
+  voyager.describe();
+
+  var voyager3 = Spacecraft.unlaunched('Voyager III');
+  voyager3.describe();
+}
+
+//扩展类（继承） https://dart.cn/samples#inheritance
+class Orbiter extends Spacecraft {
+  double altitude;
+
+  Orbiter(String name, DateTime launchDate, this.altitude)
+      : super(name, launchDate);
+
+  @override
+  void describe() {
+    super.describe();
+    print('altitude is $altitude km');
+  }
+}
+
+void inheritance() {
+  print('\n');
+  print('#' * 40);
+  print('扩展类（继承）');
+  print('#' * 40);
+
+  var obt = Orbiter('天宫号', DateTime(2021, 4, 29), 389.2);
+  obt.describe();
+}
+
+//Mixin 是一种在多个类层次结构中重用代码的方法 https://dart.cn/samples#mixins
+mixin Piloted {
+  int astronauts = 1;
+
+  void describeCrew() {
+    print('Number of astronauts: $astronauts');
+  }
+}
+class PilotedCraft extends Spacecraft with Piloted {
+  PilotedCraft(String name, DateTime launchDate) : super(name, launchDate);
+}
+
+void mixins(){
+  print('\n');
+  print('#' * 40);
+  print('Mixins');
+  print('#' * 40);
+
+  var plt = PilotedCraft('神舟1号', DateTime(1999, 11, 20));
+  plt.describe();
+  plt.describeCrew();
+}
+
+//接口和抽象类 https://dart.cn/samples#interfaces-and-abstract-classes
+class MockSpaceship implements Spacecraft {
+    @override
+  DateTime? launchDate;
+
+  @override
+  String name;
+
+  MockSpaceship(this.name, this.launchDate);
+
+  @override
+  void describe() {
+    print('Mock Spacecraft: $name');
+  }
+
+  @override
+  int? get launchYear => launchDate?.year;
+}
+
+void interface_and_abstract_classes() {
+  print('\n');
+  print('#' * 40);
+  print('接口和抽象类');
+  print('#' * 40);
+
+  var mock = MockSpaceship('测试飞行器', null);
+  mock.describe();
+}
+
+//异步 https://dart.cn/samples#async
+Future<void> the_async() async {
+  print('\n');
+  print('#' * 40);
+  print('异步');
+  print('#' * 40);
+Future<void> the_async() async {
+Future<void> createDescriptions(Iterable<String> objects) async {
+  for (final object in objects) {
+    try {
+      var file = File('$object.txt');
+      if (await file.exists()) {
+        var modified = await file.lastModified();
+        print(
+            'File for $object already exists. It was modified on $modified.');
+        continue;
+      }
+      await file.create();
+      await file.writeAsString('Start describing $object in this file.');
+    } on IOException catch (e) {
+      print('Cannot create description for $object: $e');
+    }
+  }
+}
+
 
 void main(List<String> args) {
   // 变量
@@ -132,4 +261,12 @@ void main(List<String> args) {
  
   //函数
   functions();
+
+  zhuShi(); //注释
+
+  classes();//类
+
+  mixins();//mixins
+
+  interface_and_abstract_classes();//接口和抽象类
 }
