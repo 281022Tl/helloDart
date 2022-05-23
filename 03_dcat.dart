@@ -18,8 +18,6 @@ void main(List<String> args) {
   dcat(paths, showLineNumbers: argResults[lineNumber] as bool);
 }
 
-class ArgParser {}
-
 Future<void> dcat(List<String> paths, {bool showLineNumbers = false}) async {
   if (paths.isEmpty) {
     print('type exit to quit.');
