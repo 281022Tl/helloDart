@@ -15,7 +15,10 @@ Future<void> main(List<String> args) async {
   final port = int.parse(Platform.environment['PORT'] ?? '8080');
 
   // 一个请求队列 (https://pub.dev/documentation/shelf/latest/shelf/Cascade-class.html)
-  final cascade = Cascade().add(_staticHandler);
+  final cascade = Cascade()
+      .add(_staticHandler)
+      // If a corresponding file is not found, send requests to a `Router`
+      .add(_router);
 
   // 启动一个 HTTP 服务 (https://pub.dev/documentation/shelf/latest/shelf_io/serve.html)
   final server = await shelf_io.serve(
@@ -30,3 +33,27 @@ Future<void> main(List<String> args) async {
 
 final _staticHandler =
     shelf_static.createStaticHandler('public', defaultDocument: 'index.html');
+
+// Router instance to handler requests.
+final _router = shelf_router.Router()
+  ..get('/helloworld', _helloWorldHandler)
+  ..get(
+    '/time',
+    (request) => Response.ok(DateTime.now().toUtc().toIso8601String()),
+  )
+  ..get('/sum/<a|[0-9]+>/<b|[0-9]+>', _sumHandler);
+
+Response _helloWorldHandler(Request request) => Response.ok('Hello, World!');
+
+Response _sumHandler(request, String a, String b) {
+  final aNum = int.parse(a);
+  final bNum = int.parse(b);
+  return Response.ok(
+    const JsonEncoder.withIndent(' ')
+        .convert({'a': aNum, 'b': bNum, 'sum': aNum + bNum}),
+    headers: {
+      'content-type': 'application/json',
+      'Cache-Control': 'public, max-age=604800',
+    },
+  );
+}
